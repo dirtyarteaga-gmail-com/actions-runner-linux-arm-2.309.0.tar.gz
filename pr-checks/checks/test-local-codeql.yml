@@ -1,0 +1,24 @@
+name: "Local CodeQL bundle"
+description: "Tests using a CodeQL bundle from a local file rather than a URL"
+versions: ["nightly-latest"]
+operatingSystems: ["ubuntu"]
+steps:
+  - name: Fetch a CodeQL bundle
+    shell: bash
+    env:
+      CODEQL_URL: ${{ steps.prepare-test.outputs.tools-url }}
+    run: |
+      wget "$CODEQL_URL"
+  - id: init
+    uses: ./../action/init
+    with:
+      tools: ./codeql-bundle-linux64.tar.gz
+  - uses: ./../action/.github/actions/setup-swift
+    with:
+      codeql-path: ${{ steps.init.outputs.codeql-path }}
+  - name: Build code
+    shell: bash
+    run: ./build.sh
+  - uses: ./../action/analyze
+    with:
+      upload-database: false

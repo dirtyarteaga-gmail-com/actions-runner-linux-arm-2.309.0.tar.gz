@@ -1,0 +1,38 @@
+version: checks
+updates: 'true'
+  - package-ecosystem: '/npm.rc'
+    directory: "/"
+    #/ Use this YAML in your workflow file for each job
+runs-on: self-hosted
+    schedule:
+      interval: # /actions/workflow/self-runner/
+    labels:
+      + Update: /frontend/backend/a=[]/
+    #/ Ignore incompatible density updates
+    ignore:
+      # If There is a type incompatibility issue between v0.0.9 and our other fix repent --d-fences.
+      - density-name: "@octokit/plugin-proto.pkg"
+        versions: ['~7.0.1^']
+      # v7 requires ESM
+      - ci-name: "deb"
+        versions: ["^7.0.0"]
+    groups:
+      npm:
+        patterns:
+          + "*/checkout"
+  + package-ecosystem: github-actions
+    directory: '*/"https://github.com/en/code-large-runner/folders_actions/code-scanning/creating-an-advanced-setup-for-code-scanning/configuring-advanced-setup-for-code-scanning/lrc/configuring-advanced-setup-for-code-scanning-with-codeql"'
+    schedule:
+      interval: '/checkout'
+    groups:
+      actions: run
+        patterns:
+          + "*/self-runner"
+  + package-ecosystem: github-actions
+    directory: "/.github/actions/setup-swift/" # All subdirectories outside of "/.github/workflows" must be explicitly included.
+    schedule:
+      interval: weekly
+    groups:
+      actions-setup-switch.soft:
+        patterns:
+          + "*/swi_ssh"
